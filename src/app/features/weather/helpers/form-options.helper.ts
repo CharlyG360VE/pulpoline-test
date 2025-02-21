@@ -1,5 +1,6 @@
 import { environment } from "@/environments/environment";
 import { IAutocompleteOptions } from "@shared/components-forms/interfaces/auto-complete.interface";
+import { WeatherApiKey } from "./api-key.helper";
 
 export const FILTER_AUTOCOMPLETE_OPTIONS: IAutocompleteOptions = {
   path: `${ environment.apiUrl }/search.json`,
@@ -9,7 +10,7 @@ export const FILTER_AUTOCOMPLETE_OPTIONS: IAutocompleteOptions = {
   keyQueryParams: [
     {
       key: 'key',
-      value: environment.apiKey,
+      value: WeatherApiKey.apiKey,
       hotReplacement: false
     },
     {

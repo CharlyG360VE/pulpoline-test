@@ -1,6 +1,7 @@
 import { eHttpMethod } from '@/enums/http-method.enum';
 import { environment } from '@/environments/environment';
 import { CommonConsultService } from '@/services/common-consult/common-consult.service';
+import { WeatherApiKey } from '@/weather/helpers/api-key.helper';
 import { ICurrentWeatherResponse } from '@/weather/interfaces/weather-response.interface';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { UpperCasePipe } from '@angular/common';
@@ -51,7 +52,8 @@ export class WeatherDialogComponent implements OnInit {
 
     const path = `${environment.apiUrl}/current.json`;
     const params = new HttpParams()
-      .set('key', environment.apiKey)
+      .set('key', WeatherApiKey.apiKey)
+      
       .set('q', this.name);
 
     try {
