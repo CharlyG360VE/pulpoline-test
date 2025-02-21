@@ -1,0 +1,52 @@
+<mat-sidenav-container>
+  <mat-sidenav #sidenav="matSidenav" opened class="mat-elevation-z12" mode="side" [style.width]="sidenavWidth()">
+      <button mat-icon-button (click)="collapsed.set(!collapsed())">
+
+          @if (!collapsed()) {
+              <mat-icon class="material-icons-round"> close </mat-icon>
+          } @else {
+              <mat-icon class="material-icons-round">
+                  menu
+              </mat-icon>
+          }
+      </button>
+
+      <div class="sidenav-header">
+          <img  [width]="profilePicSize()"
+                [height]="profilePicSize()"
+                src="https://www.shareicon.net/data/512x512/2016/07/26/802026_man_512x512.png"
+                alt="Profile pinture" />
+
+          <div class="header-text" [ngClass]="{'hide-header-text': collapsed()}">
+              <h2 class="gray-color-3">Carlos Molero</h2>
+              <p class="gray-color-3">Desarrollador frontend</p>
+          </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <mat-nav-list>
+          @for (item of menuItems; track item.label) {
+              <a  mat-list-item
+                  class="menu-item"
+                  [routerLink]="item.route"
+                  routerLinkActive
+                  #rla="routerLinkActive"
+                  [routerLinkActiveOptions]="{exact: true}">
+                  <mat-icon [fontSet]="rla.isActive ? 'material-icons-round' : 'material-icons-outlined'" matListItemIcon>
+                      {{item.icon}}
+                  </mat-icon>
+                  @if (!collapsed()) {
+                      <span matListItemTitle class="secondary-color animatedOpacity" [ngClass]="{'secondary-color': rla.isActive}">{{item.label}}</span>
+                  }
+              </a>
+          }
+      </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content [style.margin-left]="sidenavWidth()">
+    <div class="container">
+      <router-outlet />
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
