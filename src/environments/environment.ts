@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://api.weatherapi.com/v1'
+  apiUrl: 'https://api.weatherapi.com/v1'
 };
