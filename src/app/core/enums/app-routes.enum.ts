@@ -1,5 +1,7 @@
 export enum eAppRoutes {
   PRINCIPAL = '',
   HOME = 'inicio',
-  WEATHER = 'ciudades'
+  WEATHER = 'ciudades',
+  FAVORITES = 'favoritos',
+  SEARCH_HISTORY = 'historial-busqueda'
 };

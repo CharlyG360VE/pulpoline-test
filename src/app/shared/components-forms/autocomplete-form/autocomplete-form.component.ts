@@ -28,6 +28,7 @@ export class AutocompleteFormComponent implements OnDestroy {
   @Input() label = '';
   @Input() placeholder = '';
   @Input() disabledDropdownList = false;
+  @Output() searchQuery = new EventEmitter<string>();
   @Output() result = new EventEmitter<IDropdown[]>();
 
   private _filterOptions: IDropdown[] = [];
@@ -54,6 +55,9 @@ export class AutocompleteFormComponent implements OnDestroy {
             params = params.append(query.key, this.fc.value ?? '');
           else
             params = params.append(query.key, query.value);
+
+      if (this.fc.value?.length > 0)
+        this.searchQuery.emit(this.fc.value);
 
       this.getFilterOptions(this.options.path, params);
     }

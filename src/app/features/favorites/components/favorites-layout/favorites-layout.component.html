@@ -1,27 +1,12 @@
 <div class="d-flex justify-content-center mt-4 mb-4">
   <h2 class="primary-color">
-    Busqueda de ciudades
+    Ciudades Favoritas
   </h2>
 </div>
 
-<form [formGroup]="form">
-  <div class="row justify-content-center items-center mt-4">
-    <div class="col-md-4">
-      <pulpoline-autocomplete [fc]="form.controls.q"
-                              [options]="filterAutocompleteOptions"
-                              [disabledDropdownList]="true"
-                              label="Busqueda de ciudades"
-                              placeholder="Presiona enter para realizar busqueda..."
-                              (result)="getResult($event)"
-                              (searchQuery)="handflerHostorySearch($event)">
-      </pulpoline-autocomplete>
-    </div>
-  </div>
-</form>
-
-@if (searchResult.length > 0) {
+@if (favoritesItems.length > 0) {
   <div class="row justify-content-center flex-wrap">
-    @for (item of searchResult; track item.id) {
+    @for (item of favoritesItems; track item.id) {
       <div class="col-md-4 p-3">
         <pulpoline-card [title]="item.name" [subtitle]="item.alternativeName ?? ''">
           <div class="d-flex justify-content-center mt-3">
@@ -46,5 +31,11 @@
         </pulpoline-card>
       </div>
     }
+  </div>
+} @else {
+  <div class="d-flex justify-content-center mt-4 mb-4">
+    <div class="border-card-info">
+      <p class="pt-3">No se encontraron favoritos seleccionados</p>
+    </div>
   </div>
 }

@@ -19,6 +19,16 @@ export class MenuService {
         icon: 'apartment',
         label: 'Ciudades',
         route: `/${eAppRoutes.WEATHER}`
+      },
+      {
+        icon: 'favorite_border',
+        label: 'Favoritos',
+        route: `/${eAppRoutes.FAVORITES}`
+      },
+      {
+        icon: 'history',
+        label: 'Historial de busqueda',
+        route: `/${eAppRoutes.SEARCH_HISTORY}`
       }
     ]
   )
