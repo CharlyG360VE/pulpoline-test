@@ -2,13 +2,14 @@ import { IDropdown } from '@/interfaces/common.interface';
 import { AppState } from '@/ngrx/app.reducer';
 import { togglefavorite } from '@/ngrx/favorites-reducer/actions/favorites.action';
 import { WeatherDialogComponent } from '@/weather/components/weather-dialog/weather-dialog.component';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Store } from '@ngrx/store';
 import { PulpolineCardComponent } from '@shared/components/pulpoline-card/pulpoline-card.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-favorites-layout',
@@ -21,15 +22,20 @@ import { PulpolineCardComponent } from '@shared/components/pulpoline-card/pulpol
   templateUrl: './favorites-layout.component.html',
   styleUrl: './favorites-layout.component.scss'
 })
-export default class FavoritesLayoutComponent implements OnInit {
+export default class FavoritesLayoutComponent implements OnInit, OnDestroy {
 
   private readonly _store = inject(Store<AppState>);
   private readonly _dialog = inject(MatDialog);
+  private readonly _subscription$ = new Subscription();
 
   public favoritesItems: IDropdown[] = [];
 
   ngOnInit(): void {
     this.getFavoriteElements();
+  }
+
+  ngOnDestroy(): void {
+    this._subscription$.unsubscribe();
   }
 
   public checkFavoriteElement(item: IDropdown): boolean {
@@ -57,14 +63,16 @@ export default class FavoritesLayoutComponent implements OnInit {
   }
 
   private getFavoriteElements() {
-    this._store.select('favorites')
-      .subscribe(
-        {
-          next: ({ favorites }) => {
-            this.favoritesItems = favorites ?? [];
+    this._subscription$.add(
+      this._store.select('favorites')
+        .subscribe(
+          {
+            next: ({ favorites }) => {
+              this.favoritesItems = favorites ?? [];
+            }
           }
-        }
-      )
+        )
+    );
   }
 
 }

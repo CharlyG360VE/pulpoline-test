@@ -1,6 +1,6 @@
 import { IDropdown } from '@/interfaces/common.interface';
 import { FILTER_AUTOCOMPLETE_OPTIONS } from '@/weather/helpers/form-options.helper';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { AutocompleteFormComponent } from '@shared/components-forms/autocomplete-form/autocomplete-form.component';
@@ -13,6 +13,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '@/ngrx/app.reducer';
 import { togglefavorite } from '@/ngrx/favorites-reducer/actions/favorites.action';
 import { toggleQuerySearch } from '@/ngrx/history-reducer/actions/history.action';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-weather-layout',
@@ -28,12 +29,13 @@ import { toggleQuerySearch } from '@/ngrx/history-reducer/actions/history.action
   styleUrl: './weather-layout.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export default class WeatherLayoutComponent implements OnInit {
+export default class WeatherLayoutComponent implements OnInit, OnDestroy {
 
   private readonly _changeDetectorRef = inject(ChangeDetectorRef);
   private readonly _fb = inject(NonNullableFormBuilder);
   private readonly _store = inject(Store<AppState>);
   private readonly _dialog = inject(MatDialog);
+  private readonly _subscription$ = new Subscription();
   private _searchResult: IDropdown[] = [];
   private _favoritesItems: IDropdown[] = [];
 
@@ -53,6 +55,10 @@ export default class WeatherLayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.getFavoriteElements();
+  }
+
+  ngOnDestroy(): void {
+    this._subscription$.unsubscribe();
   }
 
   public getResult(items: IDropdown[]) {
@@ -89,14 +95,16 @@ export default class WeatherLayoutComponent implements OnInit {
   }
 
   private getFavoriteElements() {
-    this._store.select('favorites')
-      .subscribe(
-        {
-          next: ({ favorites }) => {
-            this._favoritesItems = favorites;
+    this._subscription$.add(
+      this._store.select('favorites')
+        .subscribe(
+          {
+            next: ({ favorites }) => {
+              this._favoritesItems = favorites;
+            }
           }
-        }
-      )
+        )
+    );
   }
 
 }
